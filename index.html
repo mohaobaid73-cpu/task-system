@@ -334,7 +334,7 @@ td{padding:11px 13px;font-size:13px;vertical-align:middle}
   </div>
 
   <!-- DASHBOARD -->
-  <div id="tab-db" class="pg">
+  <div id="tab-db" class="pg" style="display:none">
     <div class="stats-row">
       <div class="sc s0"><div class="sc-lbl">📌 إجمالي المهام</div><div class="sc-val" id="st0">0</div><div class="sc-sub">جميع المهام</div></div>
       <div class="sc s1"><div class="sc-lbl">✅ منجزة</div><div class="sc-val" id="st1">0</div><div class="sc-sub" id="st1p">0%</div></div>
@@ -609,6 +609,7 @@ auth.onAuthStateChanged(user=>{
 // ========== MANAGER INIT ==========
 function initManager(){
   setWeekLabel();
+  switchTab('db');
   // Load depts first, then tasks/emps
   db.ref('departments').on('value', snap=>{
     const data=snap.val()||{};
