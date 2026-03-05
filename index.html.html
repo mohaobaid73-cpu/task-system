@@ -305,7 +305,7 @@ td{padding:11px 13px;font-size:13px;vertical-align:middle}
 </div>
 
 <!-- MANAGER PAGE -->
-<div id="managerPage">
+<div id="managerPage" style="display:none">
   <div class="topbar">
     <div class="tb-brand">
       <div class="tb-ico">📋</div>
@@ -387,10 +387,10 @@ td{padding:11px 13px;font-size:13px;vertical-align:middle}
     </div>
     <div class="emp-grid" id="deptGrid2"></div>
   </div>
-</div>
+</div><!-- /managerPage -->
 
 <!-- EMP PAGE -->
-<div id="empPage">
+<div id="empPage" style="display:none">
   <div class="emp-bar">
     <div class="eico">📋</div>
     <div><h1>نظام متابعة المهام</h1><p>مهامي الأسبوعية</p></div>
@@ -586,6 +586,7 @@ auth.onAuthStateChanged(user=>{
   document.getElementById('loadingScreen').style.display='none';
   if(empToken){
     // Employee view — no auth needed
+    document.getElementById('loginPage').style.display='none';
     document.getElementById('empPage').style.display='block';
     initEmpView(empToken);
     return;
