@@ -319,7 +319,7 @@ td{padding:11px 13px;font-size:13px;vertical-align:middle}
     </div>
   </div>
   <div class="nav-tabs">
-    <div class="ntab active" onclick="switchTab('db')">📊 لوحة التحكم</div>
+    <div class="ntab" onclick="switchTab('db')">📊 لوحة التحكم</div>
     <div class="ntab" onclick="switchTab('tasks')">📋 المهام</div>
     <div class="ntab" onclick="switchTab('emps')">👥 الموظفون</div>
     <div class="ntab" onclick="switchTab('depts')">🏢 الأقسام</div>
@@ -610,8 +610,8 @@ auth.onAuthStateChanged(user=>{
 // ========== MANAGER INIT ==========
 function initManager(){
   setWeekLabel();
-  switchTab('db');
   // Load depts first, then tasks/emps
+  let firstLoad=true;
   db.ref('departments').on('value', snap=>{
     const data=snap.val()||{};
     DEPTS=Object.values(data).sort((a,b)=>a.order-b.order).map(d=>d.name);
@@ -620,6 +620,7 @@ function initManager(){
     renderDB();
     renderTasks();
     renderEmps();
+    if(firstLoad){switchTab('db');firstLoad=false;}
   });
   db.ref('tasks').on('value', snap=>{
     tasks = snap.val()||{};
@@ -652,7 +653,10 @@ function setWeekLabel(){
   document.getElementById('weekLbl').textContent='الأسبوع: '+fmt(s)+' – '+fmt(e);
 }
 function switchTab(t){
-  ['db','tasks','emps','depts'].forEach(id=>document.getElementById('tab-'+id).style.display=id===t?'block':'none');
+  ['db','tasks','emps','depts'].forEach(id=>{
+    const el=document.getElementById('tab-'+id);
+    if(el)el.style.display=id===t?'block':'none';
+  });
   document.querySelectorAll('.ntab').forEach((el,i)=>el.classList.toggle('active',['db','tasks','emps','depts'][i]===t));
 }
 
@@ -1093,10 +1097,12 @@ let depts = {};
 function renderDepts(){
   const g=document.getElementById('deptGrid2');
   if(!g)return;
-  if(!DEPTS.length){g.innerHTML='<div style="color:#94a3b8;padding:40px;text-align:center;grid-column:1/-1">لا توجد أقسام بعد. اضغط إضافة قسم للبدء.</div>';return;}
+  if(!DEPTS.length){g.innerHTML='<div style="color:#94a3b8;padding:40px;text-align:center;grid-column:1/-1">لا توجد أقسام بعد. اضغط ➕ إضافة قسم للبدء.</div>';return;}
+  const allT=taskArr();
+  const allE=empArr();
   g.innerHTML=DEPTS.map((dept,i)=>{
-    const dtasks=taskArr().filter(t=>t.dept===dept);
-    const demps=empArr().filter(e=>e.dept===dept);
+    const dtasks=allT.filter(t=>t.dept===dept);
+    const demps=allE.filter(e=>e.dept===dept);
     const col=DCOLS(i);
     const done=dtasks.filter(t=>['done','ldone'].includes(getEff(t))).length;
     const late=dtasks.filter(t=>getEff(t)==='late').length;
