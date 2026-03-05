@@ -378,7 +378,6 @@ td{padding:11px 13px;font-size:13px;vertical-align:middle}
     </div>
     <div class="emp-grid" id="empGrid"></div>
   </div>
-  </div>
 
   <!-- DEPTS TAB -->
   <div id="tab-depts" class="pg" style="display:none">
@@ -1092,9 +1091,7 @@ let depts = {};
 function renderDepts(){
   const g=document.getElementById('deptGrid2');
   if(!g)return;
-  const da=Object.values(db._repoInternal?{}:{});
-  // read from firebase snapshot already in DEPTS array
-  if(!DEPTS.length){g.innerHTML='<div style="color:#94a3b8;padding:40px;text-align:center;grid-column:1/-1">لا توجد أقسام بعد. أضف قسماً جديداً.</div>';return;}
+  if(!DEPTS.length){g.innerHTML='<div style="color:#94a3b8;padding:40px;text-align:center;grid-column:1/-1">لا توجد أقسام بعد. اضغط إضافة قسم للبدء.</div>';return;}
   g.innerHTML=DEPTS.map((dept,i)=>{
     const dtasks=taskArr().filter(t=>t.dept===dept);
     const demps=empArr().filter(e=>e.dept===dept);
